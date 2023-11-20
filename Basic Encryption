@@ -1,0 +1,153 @@
+# encryption.py 
+# Evan Barker, ENDG 233 F21 
+# A terminal-based encryption application capable of both encoding and decoding text when given a specific cipher. 
+# You may optionally import the string module from the standard Python library. No other modules may be imported. 
+# Remember to include docstrings for your functions and comments throughout your code. 
+ 
+def cipher(cipher_text): 
+    ''' 
+    This function goes over the cipher text to ensure that there are only unique elements of a-z or 
+    0-9. Furthermore, it also goes over the cipher text to ensure that there are no duplicates. The input 
+    parameter for this function is the cipher text, if the cipher text is indeed valid then it will print 
+    that it is valid. Upon completion, the encrypted and decrypted functions are executed. 
+    ''' 
+    # here we validated to ensure the cipher text was 26 unique elements of a-z or 0-9 
+    if len(cipher_text) != 26: 
+        print('Your cipher text must contain 26 unique elements of a-z or 0-9.') 
+        main() 
+    # check the cipher text for duplicates, if there are any, go back to the main function 
+    for letter in cipher_text: 
+        alpha = cipher_text.count(letter) 
+        # if alpha is greater than 1, this means that there are duplicates within the cipher text 
+        if alpha > 1: 
+            print('Your cipher text must contain 26 unique elements of a-z or 0-9.') 
+            main() 
+    print('Your cipher text is valid') 
+ 
+def bonus(cipher_text): 
+    ''' 
+    This is the bonus function, responsible for ensuring that the cipher text is alphanumeric. 
+    It is also responsible for ensuring all the letters are lowercase and that there are no duplicates; 
+    I indicated that if the cipher text opposes the logic branches that the user must enter a valid 
+    cipher text with the conditions listed below. To activate this bonus function, remove the hashtags 
+    in the encrypted and decrypted functions and add one to the regular cipher text function.  
+    ''' 
+    # this checks to see if the cipher text is alphanumeric 
+    if not cipher_text.isalnum(): 
+        print('Your cipher text must contain 26 unique elements of a-z or 0-9.') 
+        main() 
+    # converting all the characters into lowercase 
+    for letter in cipher_text: 
+        if letter.isalpha(): 
+            letter = letter.lower() 
+    # created an array for duplicates, creating a for loop to check if there are any duplicates.  
+    # if there are, they aren't added to the new cipher text 
+     
+    duplicates = [] 
+    cipher_text_without_duplicates = '' 
+    for letter in cipher_text: 
+        # This if loop checks for lowercase characters 
+        if letter.isalpha(): 
+            letter = letter.lower() 
+        # This if loop checks for duplicates 
+        if letter not in duplicates: 
+            duplicates.append(letter) 
+            cipher_text_without_duplicates += letter 
+     
+    # this checks the cipher text to ensure that it is the right length 
+    if len(cipher_text_without_duplicates) != 26: 
+        print('Your cipher text must contain 26 unique elements of a-z or 0-9.') 
+        main() 
+    # Return the new cipher text 
+    print('Your cipher text is valid') 
+    return cipher_text_without_duplicates 
+ 
+def encryption(alphabet): 
+    ''' 
+    This is the encrypted function, which is responsible for encrypting the data that the user inputs. 
+    Firstly, the user input and cipher text input is retrieved from the user. Afterwards, in order to continue 
+    with this function, the cipher text must be validated; to do so, a cipher text function was established  
+    which ultimately checks over the cipher text to make sure that the conditions are met. After this, I created 
+    a dictionary with {}, since I defined letter as the list of the alphabet, I created a for loop so that each index in the list 
+    alphabet correspons with each letter in my cipher text. I did this for every index within my cipher text. After this, I created another  
+    for loop that encrypts the user-input and prints the encrypted text. 
+    ''' 
+    # get the user input in cipher text 
+    user_input = input('Please enter the text to be processed: ') 
+    cipher_text = input('Please enter the cipher text: ') 
+    # now the cipher texts will be validated 
+    #cipher(cipher_text) 
+    # this is the bonus check for the cipher 
+    cipher_text = bonus(cipher_text) 
+    
+    cipher_dictionary = {} 
+    index = 0 
+    # created a dictionary for the cipher text. 
+    for letter in cipher_text: 
+        cipher_dictionary[alphabet[index]] = letter 
+        index += 1 
+    # append value pairs from dictionary to encrypted 
+    encrypted = ' ' 
+    for letter in user_input: 
+        encrypted_letter = cipher_dictionary[letter] 
+        encrypted += encrypted_letter  
+    print('Your output is: ', encrypted) 
+    main() 
+ 
+def decryption(alphabet): 
+    ''' 
+    This function named, 'decryption', acts in the same manner as the function, 'encryption', but essentially performs 
+    the opposite operation. I created an empty dictionary where each index within the dictionary that is in cipher text corresponds 
+    to each index within the alphabet. Afterwards, I ended up appending my key-value pairs from my dictionary so that they can be encrypted, 
+    and then printed. 
+    ''' 
+    # get the user input in cipher text 
+    user_input = input('Please enter the text to be processed: ') 
+    cipher_text = input('Please enter the cipher text: ') 
+    
+    # now the cipher texts will be validated 
+    #cipher(cipher_text) 
+     
+    # this is the bonus check for the cipher 
+    cipher_text = bonus(cipher_text) 
+     
+    cipher_dictionary = {} 
+    index = 0 
+    # created a dictionary for the cipher text. 
+    for letter in cipher_text: 
+        cipher_dictionary[letter] = alphabet[index] 
+        index += 1 
+    # append value pairs from dictionary to decrypted 
+    decrypted = ' ' 
+    for letter in user_input: 
+        decrypted_letter = cipher_dictionary[letter] 
+        decrypted += decrypted_letter 
+    print('Your output is: ', decrypted) 
+    main() 
+ 
+def main(): 
+    ''' 
+    This is the main function, responsible for directing the computer to either execute the encrypted or decrypted function, or quitting 
+    the program altogether. Also, if the user enters something besides, 0, 1, or 2, then a print message will appear stating they must re-enter 
+    a valid number. To do this, the main() is inserted underneath the last logic branch. At the very end of this function there is a main function call. 
+    ''' 
+    # alphabet array used for creating the dictionary 
+    alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'] 
+    # user-selection variable 
+    startup = input('Select 1 to encode or 2 to decode your message, select 0 to quit: ') 
+    if startup == '1': 
+        # if selection is 1, go to the encryption function 
+        encryption(alphabet) 
+    elif startup == '2': 
+        # if selection is 2, go to decryption function 
+        decryption(alphabet) 
+    elif startup == '0': 
+        # if selection is 0, quit the program 
+        print('Thank you for using the encryption program') 
+        exit() 
+    else: 
+        # if the selection is anything other than 0,1,2, then re-enter a valid number 
+    
+        print('Please enter a valid number')  
+        main() 
+main()  
